@@ -20,9 +20,6 @@ const AppID = "96e8358e-677c-4e54-a322-52f8d8a921ee"
 var logger *log.Logger
 
 func portbinding() string {
-	if port := os.Getenv("ANALYSEUI_PORT"); port != "" {
-		return port
-	}
 	if port := os.Getenv("PORT"); port != "" {
 		return port
 	}
