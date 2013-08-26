@@ -26,11 +26,6 @@ func portbinding() string {
 	return "8081"
 }
 
-func hostname() string {
-	// TODO: get this string from a config / environment variable
-	return "http://localhost:5000"
-}
-
 func rootHandler(w http.ResponseWriter, r *http.Request) {
 	tpl, err := template.New("index").Delims("{{{", "}}}").ParseFiles(templatedir + roottemplate)
 	if err != nil {

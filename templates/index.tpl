@@ -24,17 +24,13 @@
 				<div ng-controller="GridControll">
 					<div class="gridStyle" ng-grid="gridOptions">
 					</div>
-				</div>				
+				</div>
 			</div>
 		</div>
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js">
-		</script>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js">
-		</script>
-		<script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.5.0.js">
-		</script>
-		<script src="./static/js/ng-grid-2.0.7.min.js">
-                </script>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
+		<script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.5.0.js"></script>
+		<script src="./static/js/ng-grid-2.0.7.min.js"></script>
 		<script src="./static/js/ogdatwatcher.js"></script>
 	</body>
 </html>{{{end}}}
