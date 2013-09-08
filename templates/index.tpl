@@ -19,18 +19,19 @@
 			<hr/>
 			<!-- currently not working because of transition to bootstrap 3 
 			 div collapse="isCollapsed"-->
-			<div>
-				<div class="well well-large">Some content</div>
-				<div ng-controller="GridControll">
-					<div class="gridStyle" ng-grid="gridOptions">
-					</div>
-				</div>
+		<div>
+			<div class="well well-large">Some content</div>
+			<div ng-controller="GridControll">
+				<div ng-show="ninjaFinder.active()">Loading ...</div>
+				<div ng-show="!ninjaFinder.active()">Refresh</div>
+				<div class="gridStyle" ng-grid="gridOptions"></div>
 			</div>
 		</div>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
 		<script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.5.0.js"></script>
 		<script src="./static/js/ng-grid-2.0.7.min.js"></script>
+		<script src="https://raw.github.com/ajoslin/angular-promise-tracker/master/promise-tracker.js"></script>
 		<script src="./static/js/ogdatwatcher.js"></script>
 	</body>
 </html>{{{end}}}
