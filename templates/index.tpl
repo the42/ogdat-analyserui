@@ -21,9 +21,13 @@
 			 div collapse="isCollapsed"-->
 		<div>
 			<div class="well well-large">Some content</div>
-			<div ng-controller="GridControll">
-				<div ng-show="ninjaFinder.active()">Loading ...</div>
-				<div ng-show="!ninjaFinder.active()">Refresh</div>
+			<div ng-controller="EntitiesControll">
+				<div ng-show="spinner.active()">
+				  <img src="/static/images/round_spinner.png" alt="spinner"/>
+				</div>
+				<div ng-show="!spinner.active()" ng-click="reloadGrid()">
+				  <img src="/static/images/reload.png" alt="reload"/>
+				</div>
 				<div class="gridStyle" ng-grid="gridOptions"></div>
 			</div>
 		</div>
