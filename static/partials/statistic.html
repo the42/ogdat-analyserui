@@ -1,0 +1,36 @@
+<div class="span12">
+	<div class="row-fluid">
+		<div class="span6">
+			<div ng-controller="CollapseDemoCtrl">
+				<button class="btn" ng-click="isCollapsed = !isCollapsed">Toggle collapse</button>
+				<hr/>
+				<div collapse="isCollapsed">
+					<div class="well well-large">
+						Some content
+					</div>
+					<div ng-controller="TaxonomyControll">
+						<div ng-show="spinner.active()">
+							<img src="/static/images/round_spinner.png" alt="spinner"/>
+						</div>
+						<div ng-show="!spinner.active()" ng-click="loadGrid('entities')">
+							<img src="/static/images/reload.png" alt="reload" class="pointer"/>
+						</div>
+						<div ng-hide="entities">
+							<alert type="error">{{entitiesalert}}</alert>
+						</div>
+						<div ng-show="entities" class="gridStyle" ng-grid="entitygrid">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="span6">
+		</div>
+	</div>
+	<div class="row-fluid">
+		<div class="span6">
+		</div>
+		<div class="span6">
+		</div>
+	</div>
+</div>

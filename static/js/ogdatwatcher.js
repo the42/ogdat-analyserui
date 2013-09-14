@@ -1,4 +1,12 @@
-angular.module('ogdatanalysewebfrontend', ['ui.bootstrap', 'ui.bootstrap.alert', 'ngGrid', 'ajoslin.promise-tracker']);
+angular.module('ogdatanalysewebfrontend', ['ui.bootstrap', 'ngGrid', 'ajoslin.promise-tracker']).
+	config(['$routeProvider', function($routeProvider) {
+		$routeProvider.
+			when('/', {templateUrl: 'static/partials/main.html'}).
+			when('/statistic', {templateUrl: 'static/partials/statistic.html', controller: TaxonomyControll}).
+			otherwise({redirectTo: '/'});
+}]);
+
+var APIBASEURL = 'http://localhost:5100/v1/';
 
 function CollapseDemoCtrl($scope) {
 	$scope.isCollapsed = false;
@@ -7,7 +15,7 @@ function CollapseDemoCtrl($scope) {
 function TaxonomyControll($scope, $http, promiseTracker) {
 	
 	$scope.loadGrid = function(endpoint) {
-		var basetaxonomyurl = 'http://localhost:5100/v1/taxonomy/';
+		var basetaxonomyurl = APIBASEURL + 'taxonomy/';
 		var fullurl = basetaxonomyurl + endpoint;
 
 		var get = $http.get(fullurl).success(function(data) {
