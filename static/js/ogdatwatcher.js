@@ -8,7 +8,7 @@ angular.module('ogdatanalysewebfrontend', ['ui.bootstrap', 'ngGrid', 'ajoslin.pr
 
 var APIBASEURL = 'http://localhost:5100/v1/';
 
-function CollapseDemoCtrl($scope) {
+function CollapseCtrl($scope) {
 	$scope.isCollapsed = false;
 }
 
@@ -24,10 +24,14 @@ function TaxonomyControll($scope, $http, promiseTracker) {
 			$scope[endpoint] = null;
 			$scope[endpoint+'alert'] = 'Error fetching data from ' + fullurl + ': ' + ', Status:' + status + ', Time: ' + Date.now();
 		});
-		$scope.spinner = promiseTracker('spinner');
-		$scope.spinner.addPromise(get);
+		$scope[endpoint] = promiseTracker(endpoint);
+		$scope[endpoint].addPromise(get);
 	};
-
-	$scope.entitygrid = { data: 'entities'};
-	$scope.loadGrid('entities')
+	
+	var statistics = ['entities', 'versions', 'toponyms', 'categories'];
+	
+	statistics.map(function(item) {
+		$scope[item+'grid'] = { data: item};
+		$scope.loadGrid(item);
+	});
 }
