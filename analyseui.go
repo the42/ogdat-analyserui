@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/gorilla/mux"
 	"html/template"
 	"log"
 	"net/http"
@@ -39,10 +38,8 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	r := mux.NewRouter()
-	r.HandleFunc("/", rootHandler)
 
-	http.Handle("/", r)
+	http.HandleFunc("/", rootHandler)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
 	logger.Printf("analyseui (%s) listening on port %s\n", AppID, portbinding())
