@@ -1,0 +1,29 @@
+<div ng-controller="DataSetListControl">
+	<div class="row-fluid">
+		<div class="span6">
+			<div ng-show="datataxonomydetails.active()">
+				<img src="/static/images/round_spinner.png" alt="spinner"/>
+			</div>
+			<div ng-show="!datataxonomydetails.active()" ng-click="loadGrid('{{taxonomy}}', '{{subset}}')">
+				<img src="/static/images/reload.png" alt="reload" class="pointer"/>
+			</div>
+			<div ng-hide="datataxonomydetails">
+				<alert type="error">{{datataxonomydetailsalert}}</alert>
+			</div>
+			<div ng-show="datataxonomydetails" class="gridStyle" ng-grid="datataxonomydetailsgrid">
+			</div>
+		</div>
+		<div class="span6">
+			{{datataxonomygridselection}}
+		</div>
+	</div>
+	<!-- remove  BEGIN -->
+	<div class="row-fluid">
+		<div class="span6">
+
+		</div>
+		<div class="span6">
+		</div>
+	</div>
+	<!-- remove  END -->	
+</div>
