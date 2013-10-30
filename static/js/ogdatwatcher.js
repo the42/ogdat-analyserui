@@ -1,4 +1,4 @@
-angular.module('ogdatanalysewebfrontend', ['ui.bootstrap', 'ngGrid', 'ajoslin.promise-tracker']).
+angular.module('ogdatanalysewebfrontend', ['ngSanitize', 'ui.bootstrap', 'ngGrid', 'ajoslin.promise-tracker']).
 	config(['$routeProvider', function($routeProvider) {
 		$routeProvider.
 			when('/', {templateUrl: 'static/partials/main.html'}).
@@ -31,7 +31,7 @@ function TaxonomyControl($scope, $http, promiseTracker) {
 	};
 		
 	var statistics = [
-		{source:'entities', columnDefs: [{field:'ID', displayName:'Einheit'}, {field:'Numsets', displayName:'Anzahl'}]},
+		{source:'entities', columnDefs: [{field:'ID', displayName:'Veröffentlichende Stelle'}, {field:'Numsets', displayName:'Anzahl'}]},
 		{source:'versions', columnDefs: [{field:'ID', displayName:'Metadatenversion'}, {field:'Numsets', displayName:'Anzahl'}]},
 		{source:'toponyms', columnDefs: [{field:'ID', displayName:'Geographische Abdeckung'}, {field:'Numsets', displayName:'Anzahl'}]},
 		{source:'categories', columnDefs: [{field:'ID', displayName:'Kategorie'}, {field:'Numsets', displayName:'Anzahl'}]}
@@ -58,11 +58,33 @@ function TaxonomyControl($scope, $http, promiseTracker) {
 	});
 }
 
-function DataSetListControl($scope, $http, $routeParams, promiseTracker) {
+function DataSetListControl($scope, $http, $routeParams, $sanitize, promiseTracker) {
 
+	$scope.contextheading = "";
+	$scope.datataxonomygridselection = [];
+	
 	$scope.taxonomy = $routeParams.taxonomy;
 	$scope.subset = $routeParams.subset;
-	$scope.datataxonomygridselection = [];
+	
+	$scope.JSONDATASETBASEURL = DATAPORTAL_APIBASEURL + 'rest/dataset/';
+	
+	switch($scope.taxonomy) {
+		case "entities":
+			$scope.contextheading = "Veröffentlichende Stelle";
+			break;
+		case "versions":
+			$scope.contextheading = "Metadatenversion";
+			break;
+		case "toponyms":
+			$scope.contextheading = "Geographische Abdeckung";
+			break;
+		case "categories":
+			$scope.contextheading = "Kategorie";
+			break;
+		default:
+			$scope.contextheading = "";
+			break;
+	}
 
 	$scope.loadGrid = function(which, subset) {
 		var basetaxonomyurl = APIBASEURL + 'datasets/taxonomy/' // + {which}/{subset} 

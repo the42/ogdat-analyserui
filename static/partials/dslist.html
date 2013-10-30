@@ -1,10 +1,11 @@
 <div ng-controller="DataSetListControl">
+	<h2>{{contextheading}} <small>{{subset}}</small></h2>
 	<div class="row-fluid">
 		<div class="span6">
 			<div ng-show="datataxonomydetails.active()">
 				<img src="/static/images/round_spinner.png" alt="spinner"/>
 			</div>
-			<div ng-show="!datataxonomydetails.active()" ng-click="loadGrid('{{taxonomy}}', '{{subset}}')">
+			<div ng-show="!datataxonomydetails.active()" ng-click="datataxonomygridselection.length = 0;loadGrid('{{taxonomy}}', '{{subset}}')">
 				<img src="/static/images/reload.png" alt="reload" class="pointer"/>
 			</div>
 			<div ng-hide="datataxonomydetails">
@@ -14,13 +15,50 @@
 			</div>
 		</div>
 		<div class="span6">
-			{{datataxonomygridselection}}
+			<div ng-repeat="mdelement in datataxonomygridselection">
+				<h4><div ng-bind-html="mdelement.Description | linky:'_blank'"></div></h4>
+				<table class="table">
+					<tbody>
+						<tr>
+							<th>ID</th>
+							<td>{{mdelement.ID}}</td>
+						</tr>
+						<tr>
+							<th>CKAN-ID</th>
+							<td><a href='{{JSONDATASETBASEURL}}{{mdelement.CKANID}}' target='_blank'>{{mdelement.CKANID}}</a></td>
+						</tr>
+						<tr ng-class="{success: taxonomy == 'entities'}">
+							<th>Veröffentlichende Stelle</th>
+							<td>{{mdelement.Publisher}}</td>
+						</tr>
+						<tr>
+							<th>Kontaktseite datenverantwortliche Stelle</th>
+							<td><div ng-bind-html="mdelement.Contact | linky:'_blank'"></div></td>
+						</tr>
+						<tr ng-class="{success: taxonomy == 'versions'}">
+							<th>Metadatenstruktur (Version)</th>
+							<td>{{mdelement.Version}}</td>
+						</tr>
+						<tr>
+							<th>Kategorien</th>
+							<td>{{mdelement.Category}}</td>
+						</tr>
+						<tr>
+							<th>Geographische Ausdehnung</th>
+							<td>{{mdelement.GeoBBox}}</td>
+						</tr>
+						<tr ng-class="{success: taxonomy == 'toponyms'}">
+							<th>Geographische Abdeckung</th>
+							<td>{{mdelement.GeoToponym}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 	<!-- remove  BEGIN -->
 	<div class="row-fluid">
 		<div class="span6">
-
 		</div>
 		<div class="span6">
 		</div>

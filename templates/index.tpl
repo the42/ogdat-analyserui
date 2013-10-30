@@ -32,6 +32,8 @@
 		</script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js">
 		</script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular-sanitize.min.js">
+		</script>
 		<script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.6.0.js">
 		</script>
 		<script src="//raw.github.com/angular-ui/ng-grid/master/ng-grid-2.0.7.min.js">
