@@ -20,36 +20,36 @@
 				<table class="table">
 					<tbody>
 						<tr>
-							<th>ID</th>
+							<th><a ng-href="{{MetadataDescriptionUrl(mdelement.Version, 1)}}" target="_blank">ID</a></th>
 							<td>{{mdelement.ID}}</td>
 						</tr>
 						<tr>
 							<th>CKAN-ID</th>
-							<td><a href='{{JSONDATASETBASEURL}}{{mdelement.CKANID}}' target='_blank'>{{mdelement.CKANID}}</a></td>
+							<td><a ng-href='{{JSONDATASETBASEURL}}{{mdelement.CKANID}}' target='_blank'>{{mdelement.CKANID}}</a></td>
 						</tr>
 						<tr ng-class="{success: taxonomy == 'entities'}">
-							<th>Veröffentlichende Stelle</th>
-							<td>{{mdelement.Publisher}}</td>
+							<th><a ng-href="{{MetadataDescriptionUrl(mdelement.Version, 20)}}" target="_blank">Veröffentlichende Stelle</a></th>
+							<td><a ng-href='#/dslist/entities/{{mdelement.Publisher}}'>{{mdelement.Publisher}}</a></td>
 						</tr>
 						<tr>
-							<th>Kontaktseite datenverantwortliche Stelle</th>
+							<th><a ng-href="{{MetadataDescriptionUrl(mdelement.Version, 13)}}" target="_blank">Kontaktseite datenverantwortliche Stelle</a></th>
 							<td><div ng-bind-html="mdelement.Contact | linky:'_blank'"></div></td>
 						</tr>
 						<tr ng-class="{success: taxonomy == 'versions'}">
-							<th>Metadatenstruktur (Version)</th>
-							<td>{{mdelement.Version}}</td>
+							<th><a ng-href="{{MetadataDescriptionUrl(mdelement.Version, 2)}}" target="_blank">Metadatenstruktur (Version)</a></th>
+							<td><a ng-href='#/dslist/versions/{{mdelement.Version}}'>{{mdelement.Version}}</a></td>
 						</tr>
 						<tr>
-							<th>Kategorien</th>
-							<td>{{mdelement.Category}}</td>
+							<th><a ng-href="{{MetadataDescriptionUrl(mdelement.Version, 10)}}" target="_blank">Kategorien</a></th>
+							<td><div ng-repeat="category in mdelement.Category"><a ng-href='#/dslist/categories/{{category}}'>[{{category}}]</a></div></td>
 						</tr>
 						<tr>
-							<th>Geographische Ausdehnung</th>
+							<th><a ng-href="{{MetadataDescriptionUrl(mdelement.Version, 23)}}" target="_blank">Geographische Ausdehnung</a></th>
 							<td>{{mdelement.GeoBBox}}</td>
 						</tr>
 						<tr ng-class="{success: taxonomy == 'toponyms'}">
-							<th>Geographische Abdeckung</th>
-							<td>{{mdelement.GeoToponym}}</td>
+							<th><a ng-href="{{MetadataDescriptionUrl(mdelement.Version, 22)}}" target="_blank">Geographische Abdeckung</a></th>
+							<td><a ng-href='#/dslist/toponyms/{{mdelement.GeoToponym}}'>{{mdelement.GeoToponym}}</a></td>
 						</tr>
 					</tbody>
 				</table>
