@@ -6,8 +6,8 @@
 					<div ng-show="entities.active()">
 						<img src="/static/images/round_spinner.png" alt="spinner"/>
 					</div>
-					<div ng-show="!entities.active()" ng-click="loadGrid('entities')">
-						<img src="/static/images/reload.png" alt="reload" class="pointer"/>
+					<div ng-show="!entities.active()">
+						<img src="/static/images/reload.png" alt="reload" class="pointer" ng-click="loadGrid('entities')"/>
 					</div>
 					<div ng-hide="entities">
 						<alert type="error">{{entitiesalert}}</alert>
@@ -19,8 +19,8 @@
 					<div ng-show="versions.active()">
 						<img src="/static/images/round_spinner.png" alt="spinner"/>
 					</div>
-					<div ng-show="!versions.active()" ng-click="loadGrid('versions')">
-						<img src="/static/images/reload.png" alt="reload" class="pointer"/>
+					<div ng-show="!versions.active()">
+						<img src="/static/images/reload.png" alt="reload" class="pointer" ng-click="loadGrid('versions')"/>
 					</div>
 					<div ng-hide="versions">
 						<alert type="error">{{versionsalert}}</alert>
@@ -34,8 +34,8 @@
 					<div ng-show="toponyms.active()">
 						<img src="/static/images/round_spinner.png" alt="spinner"/>
 					</div>
-					<div ng-show="!toponyms.active()" ng-click="loadGrid('toponyms')">
-						<img src="/static/images/reload.png" alt="reload" class="pointer"/>
+					<div ng-show="!toponyms.active()">
+						<img src="/static/images/reload.png" alt="reload" class="pointer" ng-click="loadGrid('toponyms')"/>
 					</div>
 					<div ng-hide="toponyms">
 						<alert type="error">{{toponymsalert}}</alert>
@@ -47,8 +47,8 @@
 					<div ng-show="categories.active()">
 						<img src="/static/images/round_spinner.png" alt="spinner"/>
 					</div>
-					<div ng-show="!categories.active()" ng-click="loadGrid('categories')">
-						<img src="/static/images/reload.png" alt="reload" class="pointer"/>
+					<div ng-show="!categories.active()">
+						<img src="/static/images/reload.png" alt="reload" class="pointer" ng-click="loadGrid('categories')"/>
 					</div>
 					<div ng-hide="categories">
 						<alert type="error">{{categoriesalert}}</alert>
