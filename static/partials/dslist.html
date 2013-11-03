@@ -5,8 +5,9 @@
 			<div ng-show="datataxonomydetails.active()">
 				<img src="/static/images/round_spinner.png" alt="spinner"/>
 			</div>
-			<div ng-show="!datataxonomydetails.active()" ng-click="datataxonomygridselection.length = 0;loadGrid('{{taxonomy}}', '{{subset}}')">
-				<img src="/static/images/reload.png" alt="reload" class="pointer"/>
+			<div ng-show="!datataxonomydetails.active()">
+				<img src="/static/images/reload.png" alt="reload" class="pointer" ng-click="datataxonomygridselection.length = 0;loadGrid('{{taxonomy}}', '{{subset}}')"/>
+				<a href="" ng-click="datataxonomygridselection.length = 0;deselectallrows(datataxonomydetails, datataxonomydetailsgrid);">[unselect]</a>
 			</div>
 			<div ng-hide="datataxonomydetails">
 				<alert type="error">{{datataxonomydetailsalert}}</alert>

@@ -2,8 +2,9 @@ angular.module('ogdatanalysewebfrontend', ['ngSanitize', 'ui.bootstrap', 'ngGrid
 	config(['$routeProvider', function($routeProvider) {
 		$routeProvider.
 			when('/', {templateUrl: 'static/partials/main.html'}).
-			when('/statistic', {templateUrl: 'static/partials/statistic.html', controller: TaxonomyControl}).
-			when('/dslist/:taxonomy/:subset', {templateUrl: 'static/partials/dslist.html', controller: DataSetListControl}).
+			when('/statistic', {templateUrl: 'static/partials/statistic.html'}).
+			when('/dslist/:taxonomy/:subset', {templateUrl: 'static/partials/dslist.html'}).
+			when('/dataset/:id', {templateUrl: 'static/partials/dataset.html'}).
 			otherwise({redirectTo: '/'});
 }]);
 
@@ -78,6 +79,12 @@ function DataSetListControl($scope, $http, $routeParams, $sanitize, promiseTrack
 
 		return url;
 	};
+	
+	$scope.deselectallrows = function(grid, gridsetup)  {
+		angular.forEach(grid, function(data, index){
+			gridsetup.selectItem(index, false);
+		});
+        };
 
 	$scope.loadGrid = function(which, subset) {
 		var basetaxonomyurl = APIBASEURL + 'datasets/taxonomy/' // + {which}/{subset}
@@ -141,4 +148,43 @@ function DataSetListControl($scope, $http, $routeParams, $sanitize, promiseTrack
 	};
 
 	$scope.loadGrid($scope.taxonomy, $scope.subset);
+}
+
+function DataSetControl($scope, $http, $routeParams, $sanitize) {
+
+	$scope.MetadataDescriptionUrl = function(version, id) {
+
+		var url;
+
+		if (version.indexOf("2.0") > 0 || version.indexOf("2.1") > 0) {
+			url = "http://htmlpreview.github.io/?https://github.com/the42/ogdat/blob/master/ppogdatspec/ogdat_spec-2.1.html";
+		} else if (version.indexOf("2.2") > 0) {
+			// url = "";  // set url to new version???
+		} else {
+			// url = "";
+		}
+
+		if (url &&  id) {
+			url += "#ID.desc." + id;
+		}
+
+		return url;
+	};
+
+	$scope.loadData = function(id) {
+		var basetaxonomyurl = APIBASEURL + 'dataset/' // + {which}/{subset}
+		var fullurl = basetaxonomyurl + id;
+
+		var get = $http.get(fullurl).success(function(data) {
+			$scope.mdelement = data;
+		}).error(function(data, status, header) {
+			// TODO: ADD ERROR HANDLING HERE
+		});
+	};
+
+	$scope.mdelement = {};
+	$scope.JSONDATASETBASEURL = DATAPORTAL_APIBASEURL + 'rest/dataset/';
+
+	$scope.id = $routeParams.id;
+	$scope.loadData($scope.id);
 }
