@@ -1,8 +1,9 @@
-angular.module('ogdatanalysewebfrontend', ['ngSanitize', 'ui.bootstrap', 'ngGrid', 'ajoslin.promise-tracker']).
+angular.module('ogdatanalysewebfrontend', ['ngSanitize', 'ngRoute', 'ui.bootstrap', 'ngGrid', 'ajoslin.promise-tracker']).
 	config(['$routeProvider', function($routeProvider) {
 		$routeProvider.
 			when('/', {templateUrl: 'static/partials/main.html'}).
 			when('/statistic', {templateUrl: 'static/partials/statistic.html'}).
+			when('/dslist/:taxonomy', {templateUrl: 'static/partials/dslist.html'}).
 			when('/dslist/:taxonomy/:subset', {templateUrl: 'static/partials/dslist.html'}).
 			when('/dataset/:id', {templateUrl: 'static/partials/dataset.html'}).
 			otherwise({redirectTo: '/'});
@@ -109,7 +110,7 @@ function DataSetListControl($scope, $http, $routeParams, $sanitize, promiseTrack
 	$scope.datataxonomygridselection = [];
 
 	$scope.taxonomy = $routeParams.taxonomy;
-	$scope.subset = $routeParams.subset;
+	$scope.subset = $routeParams.subset || "";  // Might also get called only with taxonomy set. In that case prevent subset to be 'undefined'
 
 	$scope.JSONDATASETBASEURL = DATAPORTAL_APIBASEURL + 'rest/dataset/';
 

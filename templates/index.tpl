@@ -30,9 +30,11 @@
 		</div>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js">
 		</script>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js">
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js">
 		</script>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular-sanitize.min.js">
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-sanitize.js">
+		</script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-route.js">
 		</script>
 		<script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.6.0.js">
 		</script>
