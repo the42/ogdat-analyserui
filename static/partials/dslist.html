@@ -1,7 +1,7 @@
 <div ng-controller="DataSetListControl">
 	<h2>{{contextheading}} <small>{{subset}}</small></h2>
-	<div class="row-fluid">
-		<div class="span6">
+	<div class="row clearfix">
+		<div class="col-md-6 column">
 			<div ng-show="datataxonomydetails.active()">
 				<img src="/static/images/round_spinner.png" alt="spinner"/>
 			</div>
@@ -15,16 +15,8 @@
 			<div ng-show="datataxonomydetails" class="gridStyle" ng-grid="datataxonomydetailsgrid">
 			</div>
 		</div>
-		<div class="span6">
+		<div class="col-md-6 column">
 			<div datasetdetails mdelements="datataxonomygridselection"></div>
 		</div>
 	</div>
-	<!-- remove  BEGIN -->
-	<div class="row-fluid">
-		<div class="span6">
-		</div>
-		<div class="span6">
-		</div>
-	</div>
-	<!-- remove  END -->	
 </div>
