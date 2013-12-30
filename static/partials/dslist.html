@@ -16,45 +16,7 @@
 			</div>
 		</div>
 		<div class="span6">
-			<div ng-repeat="mdelement in datataxonomygridselection">
-				<h4><div ng-bind-html="mdelement.Description | linky:'_blank'"></div></h4>
-				<table class="table">
-					<tbody>
-						<tr>
-							<th><a ng-href="{{MetadataDescriptionUrl(mdelement.Version, 1)}}" target="_blank">ID</a></th>
-							<td>{{mdelement.ID}}</td>
-						</tr>
-						<tr>
-							<th>CKAN-ID</th>
-							<td><a ng-href='{{JSONDATASETBASEURL}}{{mdelement.CKANID}}' target='_blank'>{{mdelement.CKANID}}</a></td>
-						</tr>
-						<tr ng-class="{success: taxonomy == 'entities'}">
-							<th><a ng-href="{{MetadataDescriptionUrl(mdelement.Version, 20)}}" target="_blank">Veröffentlichende Stelle</a></th>
-							<td><a ng-href='#/dslist/entities/{{mdelement.Publisher}}'>{{mdelement.Publisher}}</a></td>
-						</tr>
-						<tr>
-							<th><a ng-href="{{MetadataDescriptionUrl(mdelement.Version, 13)}}" target="_blank">Kontaktseite datenverantwortliche Stelle</a></th>
-							<td><div ng-bind-html="mdelement.Contact | linky:'_blank'"></div></td>
-						</tr>
-						<tr ng-class="{success: taxonomy == 'versions'}">
-							<th><a ng-href="{{MetadataDescriptionUrl(mdelement.Version, 2)}}" target="_blank">Metadatenstruktur (Version)</a></th>
-							<td><a ng-href='#/dslist/versions/{{mdelement.Version}}'>{{mdelement.Version}}</a></td>
-						</tr>
-						<tr>
-							<th><a ng-href="{{MetadataDescriptionUrl(mdelement.Version, 10)}}" target="_blank">Kategorien</a></th>
-							<td><div ng-repeat="category in mdelement.Category"><a ng-href='#/dslist/categories/{{category}}'>[{{category}}]</a></div></td>
-						</tr>
-						<tr>
-							<th><a ng-href="{{MetadataDescriptionUrl(mdelement.Version, 23)}}" target="_blank">Geographische Ausdehnung</a></th>
-							<td>{{mdelement.GeoBBox}}</td>
-						</tr>
-						<tr ng-class="{success: taxonomy == 'toponyms'}">
-							<th><a ng-href="{{MetadataDescriptionUrl(mdelement.Version, 22)}}" target="_blank">Geographische Abdeckung</a></th>
-							<td><a ng-href='#/dslist/toponyms/{{mdelement.GeoToponym}}'>{{mdelement.GeoToponym}}</a></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+			<div datasetdetails mdelements="datataxonomygridselection"></div>
 		</div>
 	</div>
 	<!-- remove  BEGIN -->

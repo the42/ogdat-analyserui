@@ -1,5 +1,32 @@
-angular.module('ogdatanalysewebfrontend', ['ngSanitize', 'ngRoute', 'ui.bootstrap', 'ngGrid', 'ajoslin.promise-tracker']).
-	config(['$routeProvider', function($routeProvider) {
+// TODO: consider to make this function a module? Or a better way? MetadataDescriptionUrl should be available in multiple controlers
+function MetadataDescriptionUrl (version, id) {
+
+	var url;
+
+	if (version.indexOf("2.0") > 0 || version.indexOf("2.1") > 0) {
+		url = "http://htmlpreview.github.io/?https://github.com/the42/ogdat/blob/master/ppogdatspec/ogdat_spec-2.1.html";
+	} else if (version.indexOf("2.2") > 0) {
+		// url = "";  // set url to new version???
+	} else {
+		// url = "";
+	}
+
+	if (url &&  id) {
+		url += "#ID.desc." + id;
+	}
+
+	return url;	
+};
+
+var APIBASEURL = 'http://localhost:5100/v1/';
+var DATAPORTAL_APIBASEURL = 'http://www.data.gv.at/katalog/api/2/';
+
+
+// #######################################################################
+// ## Angular definition						##
+// #######################################################################
+angular.module('ogdatanalysewebfrontend', ['ngSanitize', 'ngRoute', 'ui.bootstrap', 'ngGrid', 'ajoslin.promise-tracker'])
+	.config(['$routeProvider', function($routeProvider) {
 		$routeProvider.
 			when('/', {templateUrl: 'static/partials/main.html'}).
 			when('/statistic', {templateUrl: 'static/partials/statistic.html'}).
@@ -7,10 +34,20 @@ angular.module('ogdatanalysewebfrontend', ['ngSanitize', 'ngRoute', 'ui.bootstra
 			when('/dslist/:taxonomy/:subset', {templateUrl: 'static/partials/dslist.html'}).
 			when('/dataset/:id', {templateUrl: 'static/partials/dataset.html'}).
 			otherwise({redirectTo: '/'});
-}]);
-
-var APIBASEURL = 'http://localhost:5100/v1/';
-var DATAPORTAL_APIBASEURL = 'http://www.data.gv.at/katalog/api/2/';
+		}])
+	.directive('datasetdetails', function () {
+		return {
+			restrict: 'A',
+			templateUrl: 'static/partials/datasetdetails.html',
+			controller: ['$scope', function($scope) {
+				$scope.JSONDATASETBASEURL = DATAPORTAL_APIBASEURL + 'rest/dataset/';
+				$scope.MetadataDescriptionUrl = MetadataDescriptionUrl;
+			}],
+			scope: {
+				mdelements: '='
+			},
+		}
+	});
 
 function TaxonomyControl($scope, $http, promiseTracker) {
 
@@ -61,25 +98,6 @@ function TaxonomyControl($scope, $http, promiseTracker) {
 }
 
 function DataSetListControl($scope, $http, $routeParams, $sanitize, promiseTracker) {
-
-	$scope.MetadataDescriptionUrl = function(version, id) {
-
-		var url;
-
-		if (version.indexOf("2.0") > 0 || version.indexOf("2.1") > 0) {
-			url = "http://htmlpreview.github.io/?https://github.com/the42/ogdat/blob/master/ppogdatspec/ogdat_spec-2.1.html";
-		} else if (version.indexOf("2.2") > 0) {
-			// url = "";  // set url to new version???
-		} else {
-			// url = "";
-		}
-
-		if (url &&  id) {
-			url += "#ID.desc." + id;
-		}
-
-		return url;
-	};
 	
 	$scope.deselectallrows = function(grid, gridsetup)  {
 		angular.forEach(grid, function(data, index){
@@ -111,8 +129,6 @@ function DataSetListControl($scope, $http, $routeParams, $sanitize, promiseTrack
 
 	$scope.taxonomy = $routeParams.taxonomy;
 	$scope.subset = $routeParams.subset || "";  // Might also get called only with taxonomy set. In that case prevent subset to be 'undefined'
-
-	$scope.JSONDATASETBASEURL = DATAPORTAL_APIBASEURL + 'rest/dataset/';
 
 	switch($scope.taxonomy) {
 		case "entities":
@@ -151,41 +167,23 @@ function DataSetListControl($scope, $http, $routeParams, $sanitize, promiseTrack
 	$scope.loadGrid($scope.taxonomy, $scope.subset);
 }
 
-function DataSetControl($scope, $http, $routeParams, $sanitize) {
+// TODO: consider making this a directive
+function DataSetLoadControl($scope, $http, $routeParams, $sanitize) {
+	$scope.loadData = function(ids) {
+		var basetaxonomyurl = APIBASEURL + 'dataset/'
+		var fullurl;
+		
+		for(var i=0; i<ids.length; i++) {
+			fullurl = basetaxonomyurl + ids[i];
 
-	$scope.MetadataDescriptionUrl = function(version, id) {
-
-		var url;
-
-		if (version.indexOf("2.0") > 0 || version.indexOf("2.1") > 0) {
-			url = "http://htmlpreview.github.io/?https://github.com/the42/ogdat/blob/master/ppogdatspec/ogdat_spec-2.1.html";
-		} else if (version.indexOf("2.2") > 0) {
-			// url = "";  // set url to new version???
-		} else {
-			// url = "";
+			var get = $http.get(fullurl).success(function(data) {
+				$scope.mdelements.push(data);
+			}).error(function(data, status, header) {
+				alert('Cannot fetch ' + fullurl);
+			});
 		}
-
-		if (url &&  id) {
-			url += "#ID.desc." + id;
-		}
-
-		return url;
 	};
 
-	$scope.loadData = function(id) {
-		var basetaxonomyurl = APIBASEURL + 'dataset/' // + {which}/{subset}
-		var fullurl = basetaxonomyurl + id;
-
-		var get = $http.get(fullurl).success(function(data) {
-			$scope.mdelement = data;
-		}).error(function(data, status, header) {
-			// TODO: ADD ERROR HANDLING HERE
-		});
-	};
-
-	$scope.mdelement = {};
-	$scope.JSONDATASETBASEURL = DATAPORTAL_APIBASEURL + 'rest/dataset/';
-
-	$scope.id = $routeParams.id;
-	$scope.loadData($scope.id);
+	$scope.mdelements = new Array();
+	$scope.loadData(JSON.parse($routeParams.id));
 }
