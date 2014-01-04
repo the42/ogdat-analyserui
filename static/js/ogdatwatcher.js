@@ -30,6 +30,7 @@ angular.module('ogdatanalysewebfrontend', ['ngSanitize', 'ngRoute', 'ui.bootstra
 		$routeProvider.
 			when('/', {templateUrl: 'static/partials/main.html'}).
 			when('/statistic', {templateUrl: 'static/partials/statistic.html'}).
+			when('/check', {templateUrl: 'static/partials/check.html'}).
 			when('/dslist/:taxonomy', {templateUrl: 'static/partials/dslist.html'}).
 			when('/dslist/:taxonomy/:subset', {templateUrl: 'static/partials/dslist.html'}).
 			when('/dataset/:id', {templateUrl: 'static/partials/dataset.html'}).
