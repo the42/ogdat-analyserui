@@ -1,22 +1,25 @@
-<div ng-controller="DataSetListControl">
-	<h2>{{contextheading}} <small>{{subset}}</small></h2>
-	<div class="row clearfix">
-		<div class="col-md-6 column">
-			<div ng-show="datataxonomydetails.active()">
-				<img src="/static/images/round_spinner.png" alt="spinner"/>
-			</div>
-			<div ng-show="!datataxonomydetails.active()">
-				<img src="/static/images/reload.png" alt="reload" class="pointer" ng-click="datataxonomygridselection.length = 0;loadGrid(taxonomy, subset);"/>
-				<a href="" ng-click="datataxonomygridselection.length = 0;deselectallrows(datataxonomydetails, datataxonomydetailsgrid);">[unselect]</a>
-			</div>
-			<div ng-hide="datataxonomydetails">
-				<alert type="error">{{datataxonomydetailsalert}}</alert>
-			</div>
-			<div ng-show="datataxonomydetails" class="gridStyle" ng-grid="datataxonomydetailsgrid">
-			</div>
+<div class="row clearfix">
+	<div class="col-md-12 column">
+		<h2>{{contextheading}} <small>{{subset}}</small></h2>
+	</div>
+</div>
+<div class="row clearfix">
+	<div ng-controller="DataSetListControl">
+	<div class="col-md-6 column">
+		<div ng-show="datataxonomydetails.active()">
+			<img src="/static/images/round_spinner.png" alt="spinner"/>
 		</div>
-		<div class="col-md-6 column">
-			<div datasetdetails mdelements="datataxonomygridselection"></div>
+		<div ng-show="!datataxonomydetails.active()">
+			<img src="/static/images/reload.png" alt="reload" class="pointer" ng-click="datataxonomygridselection.length = 0;loadGrid(taxonomy, subset);"/>
+			<a href="" ng-click="datataxonomygridselection.length = 0;deselectallrows(datataxonomydetails, datataxonomydetailsgrid);">[unselect]</a>
 		</div>
+		<div ng-hide="datataxonomydetails">
+			<alert type="error">{{datataxonomydetailsalert}}</alert>
+		</div>
+		<div ng-show="datataxonomydetails" class="gridStyle" ng-grid="datataxonomydetailsgrid">
+		</div>
+	</div>
+	<div class="col-md-6 column">
+		<div datasetdetails mdelements="datataxonomygridselection"></div>
 	</div>
 </div>
