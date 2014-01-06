@@ -1,0 +1,28 @@
+<div ng-controller="DataSetCheckListControl">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<h2>{{contextheading}} <small>{{subset}}</small></h2>
+		</div>
+	</div>
+	<div class="row clearfix">
+		<div class="col-md-4 column">
+			<div ng-show="datataxonomydetails.active()">
+				<img src="/static/images/round_spinner.png" alt="spinner"/>
+			</div>
+			<div ng-show="!datataxonomydetails.active()">
+				<img src="/static/images/reload.png" alt="reload" class="pointer" ng-click="datataxonomygridselection.length = 0;loadGrid(taxonomy, subset);"/>
+			</div>
+			<div ng-hide="datataxonomydetails">
+				<alert type="error">{{datataxonomydetailsalert}}</alert>
+			</div>
+			<div ng-show="datataxonomydetails" class="gridStyle" ng-grid="datataxonomydetailsgrid">
+			</div>
+		</div>
+		<div class="col-md-4 column">
+			<div datasetdetails mdelements="datataxonomygridselection"></div>
+		</div>
+		<div class="col-md-4 column">
+			<div checkdetails datasetid="{{datataxonomygridselection[0].CKANID}}" publisher="{{datataxonomygridselection[0].Publisher}}" version="{{datataxonomygridselection[0].Version}}"></div>
+		</div>
+	</div>
+</div>
