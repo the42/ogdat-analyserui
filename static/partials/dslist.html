@@ -1,10 +1,10 @@
-<div class="row clearfix">
-	<div class="col-md-12 column">
-		<h2>{{contextheading}} <small>{{subset}}</small></h2>
+<div ng-controller="DataSetListControl">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<h2>{{contextheading}} <small>{{subset}}</small></h2>
+		</div>
 	</div>
-</div>
 <div class="row clearfix">
-	<div ng-controller="DataSetListControl">
 	<div class="col-md-6 column">
 		<div ng-show="datataxonomydetails.active()">
 			<img src="/static/images/round_spinner.png" alt="spinner"/>
