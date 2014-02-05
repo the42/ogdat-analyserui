@@ -288,13 +288,17 @@ function DataSetCheckListControl($scope, $http, $routeParams, $sanitize, $locati
 
 	$scope.loadGrid($scope.taxonomy, $scope.subset);
 
-	// TODO: automatically select the correct data row by the URL parameter
 	$scope.$on('ngGridEventData', function() {
+		var idx = 0;
 		if ($scope.datasetid.length) {
-			// Iterate over elements in grid and when found, set it. Otherwise select first row
-		} else {
-			$scope.datataxonomydetailsgrid.selectRow(0, true);
+			for (var i = 0; i < $scope.datataxonomydetailsgrid.data.length; i++) {
+				if ($scope.datataxonomydetails[i].CKANID === $scope.datasetid) {
+					idx = i;
+					break;
+				}
+			}
 		}
+		$scope.datataxonomydetailsgrid.selectRow(idx, true);
 	});
 	$scope.$watch('datataxonomygridselection[0].CKANID', function(oldVal, newVal) {
 		if(oldVal) {
