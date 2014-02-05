@@ -42,7 +42,7 @@
 	<h5>Informationen</h5>
 	<table class="table">
 		<tbody>
-			<tr ng-repeat="checkelement in infoRecords | filter:Link | orderBy:['FieldID', 'Reason_Text']">
+			<tr ng-repeat="checkelement in infoRecords | orderBy:['FieldID', 'Reason_Text']">
 				<td>{{checkelement.Reason_Text}}</a></td>
 				<td><a ng-href="{{MetadataDescriptionUrl(version, checkelement.FieldID)}}" target="_blank">{{checkelement.FieldID}}</a></td>
 			</tr>

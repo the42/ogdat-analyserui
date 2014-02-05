@@ -3,9 +3,9 @@ function MetadataDescriptionUrl (version, id) {
 	var url;
 
 	if (version.indexOf("2.0") > 0 || version.indexOf("2.1") > 0) {
-		url = "http://htmlpreview.github.io/?https://github.com/the42/ogdat/blob/master/ppogdatspec/ogdat_spec-2.1.html";
+		url = "http://htmlpreview.github.io/?https://github.com/the42/ogdat/blob/master/ogdatv21/ogdat_spec-2.1.html";
 	} else if (version.indexOf("2.2") > 0) {
-		// url = "";  // set url to new version???
+		url = "http://htmlpreview.github.io/?https://github.com/the42/ogdat/blob/master/ogdatv22/ogdat_spec-2.2.html";
 	} else {
 		// url = "";
 	}
@@ -15,7 +15,7 @@ function MetadataDescriptionUrl (version, id) {
 	}
 
 	return url;	
-};
+}
 
 var APIBASEURL = 'http://localhost:5100/v1/';
 var DATAPORTAL_APIBASEURL = 'http://www.data.gv.at/katalog/api/2/';
@@ -32,7 +32,7 @@ angular.module('ogdatanalysewebfrontend', ['ngSanitize', 'ngRoute', 'ui.bootstra
 			when('/check', {templateUrl: 'static/partials/check.html'}).
 			when('/dslist/:taxonomy', {templateUrl: 'static/partials/dslist.html'}).
 			when('/dslist/:taxonomy/:subset', {templateUrl: 'static/partials/dslist.html'}).
-			when('/checklist/:taxonomy/:subset', {templateUrl: 'static/partials/checklist.html'}).
+			when('/checklist/:taxonomy/:subset', {templateUrl: 'static/partials/checklist.html', reloadOnSearch: false}).
 			when('/dataset/:id', {templateUrl: 'static/partials/dataset.html'}).
 			otherwise({redirectTo: '/'});
 		}])
@@ -46,8 +46,8 @@ angular.module('ogdatanalysewebfrontend', ['ngSanitize', 'ngRoute', 'ui.bootstra
 			}],
 			scope: {
 				mdelements: '='
-			},
-		}
+			}
+		};
 	})
 	.filter('ErrorSuccessLink', [function () {
 		return function (checkrecords) {
@@ -65,12 +65,16 @@ angular.module('ogdatanalysewebfrontend', ['ngSanitize', 'ngRoute', 'ui.bootstra
 		};
 	}])
 	.filter('RecordsType', [function () {
-		return function (checkrecords, type) {
+		return function (checkrecords, intype) {
 			if (!angular.isUndefined(checkrecords) &&  checkrecords.length > 0) {
 				var tempRecords = [];
 				angular.forEach(checkrecords, function (record) {
-					if (record.Status == type) {
-						tempRecords.push(record);
+					if (record.Status === intype) {
+						if (record.Status === 'info' && (record.Fieldstatus & 0x2000)) {
+							// do not add link inforecords
+						} else {
+							tempRecords.push(record);
+						}
 					}
 				});
 				return tempRecords;
@@ -88,15 +92,12 @@ angular.module('ogdatanalysewebfrontend', ['ngSanitize', 'ngRoute', 'ui.bootstra
 				$scope.MetadataDescriptionUrl = MetadataDescriptionUrl;
 
 				$scope.loadData = function(id) {
-					var fullurl = APIBASEURL + 'check/' + id
-					var get = $http.get(fullurl).success(function(data) {
+					var fullurl = APIBASEURL + 'check/' + id;
+					$http.get(fullurl).success(function(data) {
 						$scope.checkrecord = data;
 					}).error(function(data, status, header) {
 						alert('Cannot fetch ' + fullurl);
 					});
-				};
-				$scope.Link = function(item) {
-					return !(item.Fieldstatus & 0x2000);
 				};
 				$scope.csstableclassforitemstatus = function(item) {
 					return {"info":"success", "warning":"warning", "error":"danger"}[item];
@@ -122,7 +123,7 @@ angular.module('ogdatanalysewebfrontend', ['ngSanitize', 'ngRoute', 'ui.bootstra
 					}
 				});
 			}
-		}
+		};
 	});
 
 function TaxonomyControl($scope, $http, promiseTracker) {
@@ -134,14 +135,16 @@ function TaxonomyControl($scope, $http, promiseTracker) {
 		var get = $http.get(fullurl).success(function(data) {
 			// programmatically add a column 'href' which contains the link to the dataset list display page
 			for (var i = 0; i < data.length; i++) {
-				data[i].href = '#dslist/' + endpoint+ '/' + data[i].ID
+				data[i].href = '#dslist/' + endpoint+ '/' + data[i].ID;
 			}
 			$scope[endpoint] = data;
+			promiseTracker.deregister(endpoint);
 		}).error(function(data, status, header) {
 			$scope[endpoint] = null;
 			$scope[endpoint+'alert'] = 'Error fetching data from ' + fullurl + ': ' + ', Status:' + status + ', Time: ' + Date.now();
+			promiseTracker.deregister(endpoint);
 		});
-		$scope[endpoint] = promiseTracker(endpoint);
+		$scope[endpoint] = promiseTracker.register(endpoint);
 		$scope[endpoint].addPromise(get);
 	};
 
@@ -182,19 +185,21 @@ function TaxonomyCheckControl($scope, $http, promiseTracker) {
 		var get = $http.get(fullurl).success(function(data) {
 			// programmatically add a column 'href' which contains the link to the dataset list display page
 			for (var i = 0; i < data.length; i++) {
-				data[i].href = '#checklist/' + endpoint+ '/' + data[i].ID
+				data[i].href = '#checklist/' + endpoint+ '/' + data[i].ID;
 			}
 			$scope[endpoint] = data;
+			promiseTracker.deregister(endpoint);
 		}).error(function(data, status, header) {
 			$scope[endpoint] = null;
 			$scope[endpoint+'alert'] = 'Error fetching data from ' + fullurl + ': ' + ', Status:' + status + ', Time: ' + Date.now();
+			promiseTracker.deregister(endpoint);
 		});
-		$scope[endpoint] = promiseTracker(endpoint);
+		$scope[endpoint] = promiseTracker.register(endpoint);
 		$scope[endpoint].addPromise(get);
 	};
 
 	var statistics = [
-		{source:'entities', columnDefs: [{field:'ID', displayName:'Veröffentlichende Stelle'}, {field:'Numsets', displayName:'Anzahl Check-Datensätze'}]},
+		{source:'entities', columnDefs: [{field:'ID', displayName:'Veröffentlichende Stelle'}, {field:'Numsets', displayName:'Anzahl Check-Datensätze'}]}
 	];
 
 	// in the ng-grid, the element should be displayed as a link using the contents of the field 'href' as href
@@ -217,10 +222,10 @@ function TaxonomyCheckControl($scope, $http, promiseTracker) {
 	});
 }
 
-function DataSetCheckListControl($scope, $http, $routeParams, $sanitize, promiseTracker) {
+function DataSetCheckListControl($scope, $http, $routeParams, $sanitize, $location, promiseTracker) {
 	
 	$scope.loadGrid = function(which, subset) {
-		var basetaxonomyurl = APIBASEURL + 'datasets/taxonomy/' // + {which}/{subset}
+		var basetaxonomyurl = APIBASEURL + 'datasets/taxonomy/'; // + {which}/{subset}
 		var fullurl = basetaxonomyurl + which + '/' + subset;
 
 		var get = $http.get(fullurl).success(function(data) {
@@ -230,11 +235,13 @@ function DataSetCheckListControl($scope, $http, $routeParams, $sanitize, promise
 				data[i].href = DATAPORTAL_APIBASEURL + 'rest/dataset/' + data[i].CKANID;
 			}
 			$scope.datataxonomydetails = data;
+			promiseTracker.deregister('datataxonomydetails');
 		}).error(function(data, status, header) {
 			$scope.datataxonomydetails = null;
 			$scope.datataxonomydetailsalert = 'Error fetching data from ' + fullurl + ': ' + ', Status:' + status + ', Time: ' + Date.now();
+			promiseTracker.deregister('datataxonomydetails');
 		});
-		$scope.datataxonomydetails = promiseTracker('datataxonomydetails');
+		$scope.datataxonomydetails = promiseTracker.register('datataxonomydetails');
 		$scope.datataxonomydetails.addPromise(get);
 	};
 
@@ -243,6 +250,7 @@ function DataSetCheckListControl($scope, $http, $routeParams, $sanitize, promise
 
 	$scope.taxonomy = $routeParams.taxonomy;
 	$scope.subset = $routeParams.subset || "";  // Might also get called only with taxonomy set. In that case prevent subset to be 'undefined'
+	$scope.datasetid = $routeParams.id || "";
 
 	switch($scope.taxonomy) {
 		case "entities":
@@ -280,10 +288,19 @@ function DataSetCheckListControl($scope, $http, $routeParams, $sanitize, promise
 
 	$scope.loadGrid($scope.taxonomy, $scope.subset);
 
-	// TODO: automatically select the first data row or by the URL parameter
-	// TODO: if first row, set URL parameter accordingly
+	// TODO: automatically select the correct data row by the URL parameter
 	$scope.$on('ngGridEventData', function() {
-		$scope.datataxonomydetailsgrid.selectRow(0, true);
+		if ($scope.datasetid.length) {
+			// Iterate over elements in grid and when found, set it. Otherwise select first row
+		} else {
+			$scope.datataxonomydetailsgrid.selectRow(0, true);
+		}
+	});
+	$scope.$watch('datataxonomygridselection[0].CKANID', function(oldVal, newVal) {
+		if(oldVal) {
+			$scope.datasetid = $scope.datataxonomydetailsgrid.selectedItems[0].CKANID;
+			$location.search('id', $scope.datasetid);
+		}
 	});
 }
 
@@ -297,7 +314,7 @@ function DataSetListControl($scope, $http, $routeParams, $sanitize, promiseTrack
 	};
 
 	$scope.loadGrid = function(which, subset) {
-		var basetaxonomyurl = APIBASEURL + 'datasets/taxonomy/' // + {which}/{subset}
+		var basetaxonomyurl = APIBASEURL + 'datasets/taxonomy/'; // + {which}/{subset}
 		var fullurl = basetaxonomyurl + which + '/' + subset;
 
 		var get = $http.get(fullurl).success(function(data) {
@@ -307,11 +324,13 @@ function DataSetListControl($scope, $http, $routeParams, $sanitize, promiseTrack
 				data[i].href = DATAPORTAL_APIBASEURL + 'rest/dataset/' + data[i].CKANID;
 			}
 			$scope.datataxonomydetails = data;
+			promiseTracker.deregister('datataxonomydetails');
 		}).error(function(data, status, header) {
 			$scope.datataxonomydetails = null;
 			$scope.datataxonomydetailsalert = 'Error fetching data from ' + fullurl + ': ' + ', Status:' + status + ', Time: ' + Date.now();
+			promiseTracker.deregister('datataxonomydetails');
 		});
-		$scope.datataxonomydetails = promiseTracker('datataxonomydetails');
+		$scope.datataxonomydetails = promiseTracker.register('datataxonomydetails');
 		$scope.datataxonomydetails.addPromise(get);
 	};
 
@@ -360,13 +379,13 @@ function DataSetListControl($scope, $http, $routeParams, $sanitize, promiseTrack
 
 function DataSetLoadControl($scope, $http, $routeParams, $sanitize) {
 	$scope.loadData = function(ids) {
-		var basetaxonomyurl = APIBASEURL + 'dataset/'
+		var basetaxonomyurl = APIBASEURL + 'dataset/';
 		var fullurl;
 
 		for(var i=0; i<ids.length; i++) {
 			fullurl = basetaxonomyurl + ids[i];
 
-			var get = $http.get(fullurl).success(function(data) {
+			$http.get(fullurl).success(function(data) {
 				$scope.mdelements.push(data);
 			}).error(function(data, status, header) {
 				alert('Cannot fetch ' + fullurl);
@@ -374,6 +393,6 @@ function DataSetLoadControl($scope, $http, $routeParams, $sanitize) {
 		}
 	};
 
-	$scope.mdelements = new Array();
+	$scope.mdelements = [];
 	$scope.loadData(JSON.parse($routeParams.id));
 }
