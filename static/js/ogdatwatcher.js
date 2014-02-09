@@ -30,6 +30,7 @@ angular.module('ogdatanalysewebfrontend', ['ngSanitize', 'ngRoute', 'ui.bootstra
 			when('/', {templateUrl: 'static/partials/main.html'}).
 			when('/statistic', {templateUrl: 'static/partials/statistic.html'}).
 			when('/check', {templateUrl: 'static/partials/check.html'}).
+			when('/inconsistencies', {templateUrl: 'static/partials/inconsistencies.html'}).
 			when('/dslist/:taxonomy', {templateUrl: 'static/partials/dslist.html'}).
 			when('/dslist/:taxonomy/:subset', {templateUrl: 'static/partials/dslist.html'}).
 			when('/checklist/:taxonomy/:subset', {templateUrl: 'static/partials/checklist.html', reloadOnSearch: false}).
