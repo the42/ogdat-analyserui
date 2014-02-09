@@ -2,20 +2,6 @@
 <p>
 {{publisher}}: {{datasetid}}
 </p>
-<div ng-show="linkRecords.length">
-	<h5>Links in Metadaten</h5>
-	<table class="table">
-		<tbody>
-			<tr class='{{csstableclassforitemstatus(checkelement.Status)}}' ng-repeat="checkelement in linkRecords | orderBy:['FieldID', 'Reason_Text']">
-				<td><a ng-href="{{checkelement.Reason_Text}}">{{checkelement.Reason_Text}}</a></td>
-				<td><a ng-href="{{MetadataDescriptionUrl(version, checkelement.FieldID)}}" target="_blank">{{checkelement.FieldID}}</a></td>
-			</tr>
-		</tbody>
-	</table>
-</div>
-<p ng-show="!linkRecords.length" class="text-danger">
-	Datensatz enthält keine Links auf Ressourcen!
-</p>
 <div ng-show="errorRecords.length">
 	<h5>Fehler</h5>
 	<table class="table">
@@ -49,3 +35,17 @@
 		</tbody>
 	</table>
 </div>
+<div ng-show="linkRecords.length">
+	<h5>Links in Metadaten</h5>
+	<table class="table">
+		<tbody>
+			<tr class='{{csstableclassforitemstatus(checkelement.Status)}}' ng-repeat="checkelement in linkRecords | orderBy:['FieldID', 'Reason_Text']">
+				<td><a ng-href="{{checkelement.Reason_Text}}">{{checkelement.Reason_Text}}</a></td>
+				<td><a ng-href="{{MetadataDescriptionUrl(version, checkelement.FieldID)}}" target="_blank">{{checkelement.FieldID}}</a></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<p ng-show="!linkRecords.length" class="text-danger">
+	Datensatz enthält keine Links auf Ressourcen!
+</p>
