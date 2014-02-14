@@ -139,13 +139,11 @@ function TaxonomyControl($scope, $http, promiseTracker) {
 				data[i].href = '#dslist/' + endpoint+ '/' + data[i].ID;
 			}
 			$scope[endpoint] = data;
-			promiseTracker.deregister(endpoint);
 		}).error(function(data, status, header) {
 			$scope[endpoint] = null;
 			$scope[endpoint+'alert'] = 'Error fetching data from ' + fullurl + ': ' + ', Status:' + status + ', Time: ' + Date.now();
-			promiseTracker.deregister(endpoint);
 		});
-		$scope[endpoint] = promiseTracker.register(endpoint);
+		$scope[endpoint] = promiseTracker();
 		$scope[endpoint].addPromise(get);
 	};
 
@@ -189,13 +187,11 @@ function TaxonomyCheckControl($scope, $http, promiseTracker) {
 				data[i].href = '#checklist/' + endpoint+ '/' + data[i].ID;
 			}
 			$scope[endpoint] = data;
-			promiseTracker.deregister(endpoint);
 		}).error(function(data, status, header) {
 			$scope[endpoint] = null;
 			$scope[endpoint+'alert'] = 'Error fetching data from ' + fullurl + ': ' + ', Status:' + status + ', Time: ' + Date.now();
-			promiseTracker.deregister(endpoint);
 		});
-		$scope[endpoint] = promiseTracker.register(endpoint);
+		$scope[endpoint] = promiseTracker();
 		$scope[endpoint].addPromise(get);
 	};
 
@@ -236,13 +232,11 @@ function DataSetCheckListControl($scope, $http, $routeParams, $sanitize, $locati
 				data[i].href = DATAPORTAL_APIBASEURL + 'rest/dataset/' + data[i].CKANID;
 			}
 			$scope.datataxonomydetails = data;
-			promiseTracker.deregister('datataxonomydetails');
 		}).error(function(data, status, header) {
 			$scope.datataxonomydetails = null;
 			$scope.datataxonomydetailsalert = 'Error fetching data from ' + fullurl + ': ' + ', Status:' + status + ', Time: ' + Date.now();
-			promiseTracker.deregister('datataxonomydetails');
 		});
-		$scope.datataxonomydetails = promiseTracker.register('datataxonomydetails');
+		$scope.datataxonomydetails = promiseTracker();
 		$scope.datataxonomydetails.addPromise(get);
 	};
 
@@ -329,13 +323,11 @@ function DataSetListControl($scope, $http, $routeParams, $sanitize, promiseTrack
 				data[i].href = DATAPORTAL_APIBASEURL + 'rest/dataset/' + data[i].CKANID;
 			}
 			$scope.datataxonomydetails = data;
-			promiseTracker.deregister('datataxonomydetails');
 		}).error(function(data, status, header) {
 			$scope.datataxonomydetails = null;
 			$scope.datataxonomydetailsalert = 'Error fetching data from ' + fullurl + ': ' + ', Status:' + status + ', Time: ' + Date.now();
-			promiseTracker.deregister('datataxonomydetails');
 		});
-		$scope.datataxonomydetails = promiseTracker.register('datataxonomydetails');
+		$scope.datataxonomydetails = promiseTracker();
 		$scope.datataxonomydetails.addPromise(get);
 	};
 
