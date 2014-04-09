@@ -2,6 +2,7 @@
 <html ng-app="ogdatanalysewebfrontend">
 	<head>
 		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Open Government Data Österreich - Metadatenqualitätsportal</title>
 		<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet"/>
 		<link href="./static/css/ng-grid.min.css" rel="stylesheet"/>

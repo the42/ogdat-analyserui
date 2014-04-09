@@ -1,3 +1,9 @@
+@media (min-width: 1900px) {
+  .container {
+    width: 1800px;
+   }
+}
+
 .pointer {
   cursor: pointer;
 }
