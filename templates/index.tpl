@@ -6,7 +6,6 @@
 		<title>Open Government Data Österreich - Metadatenqualitätsportal</title>
 		<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet"/>
 		<link href="./static/css/ng-grid.min.css" rel="stylesheet"/>
-		<!--link href="//raw.github.com/angular-ui/ng-grid/master/ng-grid.min.css" rel="stylesheet"/-->
 		<link href="./static/css/custom-grid.css" rel="stylesheet"/>
 		<link href="./static/css/ogdat-analyserui.css" rel="stylesheet"/>
 	</head>
