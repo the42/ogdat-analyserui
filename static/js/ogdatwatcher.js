@@ -35,6 +35,7 @@ angular.module('ogdatanalysewebfrontend', ['ngSanitize', 'ngRoute', 'ui.bootstra
 			when('/dslist/:taxonomy/:subset', {templateUrl: 'static/partials/dslist.html'}).
 			when('/checklist/:taxonomy/:subset', {templateUrl: 'static/partials/checklist.html', reloadOnSearch: false}).
 			when('/dataset/:id', {templateUrl: 'static/partials/dataset.html'}).
+			when('/an/an003', {templateUrl: 'static/partials/an003.html'}).
 			otherwise({redirectTo: '/'});
 		}])
 	.directive('datasetdetails', function () {
@@ -176,7 +177,7 @@ function TaxonomyControl($scope, $http, promiseTracker) {
 }
 
 function TaxonomyCheckControl($scope, $http, promiseTracker) {
-
+	
 	$scope.loadGrid = function(endpoint) {
 		var basetaxonomyurl = APIBASEURL + 'check/taxonomy/';
 		var fullurl = basetaxonomyurl + endpoint;
