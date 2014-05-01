@@ -39,7 +39,7 @@
 		</script>		
 		<script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.9.0.js">
 		</script>
-		<script src="//raw.github.com/angular-ui/ng-grid/master/ng-grid-2.0.7.min.js">
+		<script src="//raw.github.com/angular-ui/ng-grid/master/ng-grid-2.0.11.min.js">
 		</script>
 		<script src="//raw.github.com/ajoslin/angular-promise-tracker/master/promise-tracker.js">
 		</script>
