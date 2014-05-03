@@ -19,6 +19,7 @@ function MetadataDescriptionUrl (version, id) {
 
 var APIBASEURL = 'http://localhost:5100/v1/';
 var DATAPORTAL_APIBASEURL = 'http://www.data.gv.at/katalog/api/2/';
+var DATAPORTAL_DATASETBASEURL = 'http://www.data.gv.at/datensatz/';
 
 
 // #######################################################################
@@ -36,6 +37,7 @@ angular.module('ogdatanalysewebfrontend', ['ngSanitize', 'ngRoute', 'ui.bootstra
 			when('/checklist/:taxonomy/:subset', {templateUrl: 'static/partials/checklist.html', reloadOnSearch: false}).
 			when('/dataset/:id', {templateUrl: 'static/partials/dataset.html'}).
 			when('/an/an003', {templateUrl: 'static/partials/an003.html'}).
+			when('/an/an003/:taxonomy/:subset', {templateUrl: 'static/partials/an003details.html'}).			
 			otherwise({redirectTo: '/'});
 		}])
 	.directive('datasetdetails', function () {
@@ -218,6 +220,143 @@ function TaxonomyCheckControl($scope, $http, promiseTracker) {
 		};
 		$scope.loadGrid(item.source);
 	});
+}
+
+function AN003Control($scope, $http, promiseTracker) {
+	
+	$scope.loadGrid = function(endpoint) {
+		var basetaxonomyurl = APIBASEURL + 'analyse/an003/';
+		var fullurl = basetaxonomyurl + endpoint;
+
+		var get = $http.get(fullurl).success(function(data) {
+			// programmatically add a column 'href' which contains the link to the dataset list display page
+			for (var i = 0; i < data.length; i++) {
+				data[i].href = '#an/an003/' + endpoint+ '/' + data[i].ID;
+			}
+			$scope[endpoint] = data;
+		}).error(function(data, status, header) {
+			$scope[endpoint] = null;
+			$scope[endpoint+'alert'] = 'Error fetching data from ' + fullurl + ': ' + ', Status:' + status + ', Time: ' + Date.now();
+		});
+		$scope[endpoint] = promiseTracker();
+		$scope[endpoint].addPromise(get);
+	};
+
+	var statistics = [
+		{source:'entities', columnDefs: [{field:'ID', displayName:'Veröffentlichende Stelle'}, {field:'Numsets', displayName:'Anzahl Check-Datensätze'}]}
+	];
+
+	// in the ng-grid, the element should be displayed as a link using the contents of the field 'href' as href
+	var linkCellTemplate = '<div class="ngCellText" ng-class="col.colIndex()">' +
+		'  <a href="{{row.entity[\'href\']}}">{{row.getProperty(col.field)}}</a>' +
+		'</div>';
+
+	statistics.map(function(item) {
+		// The first and second item is a link to load the dataset list
+		item.columnDefs[0].cellTemplate = item.columnDefs[1].cellTemplate = linkCellTemplate;
+
+		// set up the grid options
+		$scope[item.source+'grid'] = {
+			data: item.source,
+			showFooter: true,
+			multiSelect: false,
+			columnDefs: item.columnDefs
+		};
+		$scope.loadGrid(item.source);
+	});
+}
+
+function AN003DetailsControl($scope, $http,  $routeParams, $sanitize, promiseTracker) {
+
+	$scope.loadGrid = function(which, subset) {
+		var basetaxonomyurl = APIBASEURL + 'analyse/an003/'; // + {which}/{subset}
+		var fullurl = basetaxonomyurl + which + '/' + subset;
+
+		var get = $http.get(fullurl).success(function(data) {
+			var displaydata = [];
+			// programmatically add a column 'href' which contains the link to the dataset list display page
+			for (var i1 = 0; i1 < data.length; i1++) {
+				for(var i2 = 0; i2 < data[i1].Reason_Text.length; i2++) {
+					var item = Object.create(data[i1]);
+
+					item.Reason_Text = data[i1].Reason_Text[i2];
+					item.API = '▶';
+					item.APIhref = DATAPORTAL_APIBASEURL + 'rest/dataset/' + data[i1].CKANID;
+					item.DShref = DATAPORTAL_DATASETBASEURL + '?id=' + data[i1].CKANID;
+
+					displaydata.push(item);
+				}
+			}
+			$scope.an003taxonomydetails = displaydata;
+		}).error(function(data, status, header) {
+			$scope.an003taxonomydetails = null;
+			$scope.an003taxonomydetailsalert = 'Error fetching data from ' + fullurl + ': ' + ', Status:' + status + ', Time: ' + Date.now();
+		});
+		$scope.an003taxonomydetails = promiseTracker();
+		$scope.an003taxonomydetails.addPromise(get);
+	};
+
+	$scope.contextheading = "";
+	$scope.datagridselection = [];
+	// $scope.datagridselection[0].Reason_Text = "Klicken sie auf einen Eintrag in der Liste um die Linkdetails anzuzeigen";
+	
+	$scope.taxonomy = $routeParams.taxonomy;
+	$scope.subset = $routeParams.subset;
+
+	switch($scope.taxonomy) {
+		case "entities":
+			$scope.contextheading = "Veröffentlichende Stelle";
+			break;
+		case "versions":
+			$scope.contextheading = "Metadatenversion";
+			break;
+		case "toponyms":
+			$scope.contextheading = "Geographische Abdeckung";
+			break;
+		case "categories":
+			$scope.contextheading = "Kategorie";
+			break;
+		default:
+			$scope.contextheading = "";
+			break;
+	}
+	
+	$scope.coderegex = /'\d\d\d'/;
+	$scope.searchterm = "";
+
+	// in the ng-grid, the element should be displayed as a link using the contents of the field 'href' as href
+	var apilinkCellTemplate = '<div class="ngCellText" ng-class="col.colIndex()">' +
+		'  <a href="{{row.entity[\'APIhref\']}}" target="_blank">{{row.getProperty(col.field)}}</a>' +
+		'</div>';
+
+	var dslinkCellTemplate = '<div class="ngCellText" ng-class="col.colIndex()">' +
+		'  <a href="{{row.entity[\'DShref\']}}" target="_blank">{{row.getProperty(col.field)}}</a>' +
+		'</div>';
+
+	$scope.an003taxonomydetailsgrid = {
+		data: 'an003taxonomydetails',
+		showFooter: false,
+		multiSelect: false,
+		enableColumnResize: true,
+		showHeader: true,
+		showGroupPanel: true,
+		groups: ['CKANID','FieldID'],
+		selectedItems: $scope.datagridselection,
+		columnDefs: [
+			{field:'API', displayName:'', cellTemplate:apilinkCellTemplate, width:20},
+			{field:'CKANID', displayName:'CKAN-ID', cellTemplate:dslinkCellTemplate, width:200},
+			{field:'FieldID', displayName:'Kennung', width:100},
+			{field:'Reason_Text', displayName:'Fehlermeldung'}
+		]
+	};
+	
+	$scope.$watch('datagridselection[0].Reason_Text', function(oldVal, newVal) {
+		if(oldVal) {
+			$scope.searchterm = $scope.datagridselection[0].Reason_Text.substring($scope.datagridselection[0].Reason_Text.lastIndexOf(':')+1);
+		}
+	});	
+	
+	$scope.loadGrid($scope.taxonomy, $scope.subset);
 }
 
 function DataSetCheckListControl($scope, $http, $routeParams, $sanitize, $location, promiseTracker) {

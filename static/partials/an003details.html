@@ -1,0 +1,49 @@
+<div ng-controller="AN003DetailsControl">
+	<div class="row clearfix">
+		<div class="col-md-12 column" >
+			<h3>
+				{{contextheading}} <small>{{subset}}</small>
+			</h3>
+			<div ng-show="an003taxonomydetails.active()">
+				<img src="/static/images/round_spinner.png" alt="spinner"/>
+			</div>
+			<div ng-show="!an003taxonomydetails.active()">
+				<img src="/static/images/reload.png" alt="reload" class="pointer" ng-click="loadGrid(taxonomy, subset)"/>
+			</div>
+			<div ng-hide="an003taxonomydetails">
+				<alert type="error">{{an003taxonomydetailsalert}}</alert>
+			</div>
+			<div ng-show="an003taxonomydetails" class="gridStyle" ng-grid="an003taxonomydetailsgrid">
+			</div>
+		</div>
+	</div>
+	<div class="row clearfix">
+		<div class="col-md-12 column" >
+			<h3>Detailierte Fehlermeldung</h3>
+		</div>
+	</div>
+	<div class="row clearfix">
+		<div class="col-md-8 column">
+			<div ng-hide="datagridselection[0].Reason_Text">
+				<p>
+					Klicken sie in die Details der Tabelle um den fehlerhaten Link und ggf. weitere Informationen zu erhalten
+				</p>
+			</div>
+			<div ng-bind-html="datagridselection[0].Reason_Text | linky:'_blank'">
+			</div>
+		</div>
+		<div class="col-md-4 column">
+			<div ng-if="datagridselection.length > 0 && coderegex.test(datagridselection[0].Reason_Text)">
+				<p>
+					Hilfe zu <a href="http://de.wikipedia.org/wiki/HTTP-Statuscode?printable=yes">HTTP-Statuscodes (Wikipedia)</a>
+				</p>
+			</div>
+			<div ng-if="datagridselection.length > 0 && !coderegex.test(datagridselection[0].Reason_Text)">
+				<p>
+					Suche nach Fehler in <a href="http://duckduckgo.com/?q={{searchterm}}">DuckDuckGo</a>
+				</p>
+			</div>
+			
+		</div>
+	</div>
+</div>
